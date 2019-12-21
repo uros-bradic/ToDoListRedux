@@ -53,6 +53,17 @@ export default class ToDoListContainer extends React.Component {
     });
   };
 
+  handleRemoveToDoButtonClick = title => {
+    this.setState(state => {
+      const itemsNewList = this.state.itemsList.filter(
+        item => item.title !== title
+      );
+      return {
+        itemsList: itemsNewList
+      };
+    });
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -61,6 +72,7 @@ export default class ToDoListContainer extends React.Component {
         <ToDoListPanel
           toDoListItems={this.state.itemsList}
           onToDoValueChange={this.handleToDoValueChange}
+          onRemoveToDoButtonClick={this.handleRemoveToDoButtonClick}
         />
       </React.Fragment>
     );
