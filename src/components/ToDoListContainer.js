@@ -1,6 +1,7 @@
 import React from "react";
 import { AddToDoField } from "./AddToDoField";
 import { ToDoListPanel } from "./ToDoListPanel";
+import arrayMove from "array-move";
 
 const toDoListItems = [
   {
@@ -18,6 +19,12 @@ export default class ToDoListContainer extends React.Component {
     newAddToDoTitle: "",
     itemsList: toDoListItems,
     errors: {}
+  };
+
+  handleSortEnd = ({ oldIndex, newIndex }) => {
+    this.setState(({ itemsList }) => ({
+      itemsList: arrayMove(itemsList, oldIndex, newIndex)
+    }));
   };
 
   handleAddToDoButtonClick = item => {
@@ -73,6 +80,7 @@ export default class ToDoListContainer extends React.Component {
           toDoListItems={this.state.itemsList}
           onToDoValueChange={this.handleToDoValueChange}
           onRemoveToDoButtonClick={this.handleRemoveToDoButtonClick}
+          onSortEnd={this.handleSortEnd}
         />
       </React.Fragment>
     );
