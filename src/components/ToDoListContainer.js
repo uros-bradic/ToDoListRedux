@@ -1,6 +1,7 @@
 import React from "react";
 import { AddToDoField } from "./AddToDoField";
 import { ToDoListPanel } from "./ToDoListPanel";
+import { ToDoProgressPanel } from "./ToDoProgressPanel";
 
 function arrayMove(arr, fromIndex, toIndex) {
   const newArray = [...arr];
@@ -10,8 +11,8 @@ function arrayMove(arr, fromIndex, toIndex) {
   return newArray;
 }
 
-function isEmptyTitle(value) {
-  return value.title === "";
+function isEmptyString(value) {
+  return value.trim() === "";
 }
 
 function isNil(value) {
@@ -67,7 +68,7 @@ export default class ToDoListContainer extends React.Component {
   };
 
   validateForm = value => {
-    const emptyToDoError = isEmptyTitle(value)
+    const emptyToDoError = isEmptyString(value.title)
       ? "Please enter to do title"
       : null;
     const toDoAlreadyExistError = isExistingItem(value, this.state.itemsList)
@@ -88,7 +89,6 @@ export default class ToDoListContainer extends React.Component {
     const errors = this.validateForm(newListItem);
     this.handleErrors(errors);
     if (hasAnyError(errors)) return;
-    console.log(errors);
     this.setState(state => {
       const itemsNewList = this.state.itemsList.concat(newListItem);
       return {
@@ -141,6 +141,7 @@ export default class ToDoListContainer extends React.Component {
           onRemoveToDoButtonClick={this.handleRemoveToDoButtonClick}
           onSortEnd={this.handleSortEnd}
         />
+        <ToDoProgressPanel toDoListItems={this.state.itemsList} />
       </React.Fragment>
     );
   }

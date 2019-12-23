@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextField } from "./TextField";
-export const AddToDoField = function AddToDoField(props, ref) {
+export const AddToDoField = function AddToDoField(props) {
   const { onAddToDoButtonClick, errors, ...inputProps } = props;
   const [itemValue, setItemValue] = useState("");
   const { emptyToDoError, toDoAlreadyExistError } = errors;
