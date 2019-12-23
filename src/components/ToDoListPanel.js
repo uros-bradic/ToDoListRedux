@@ -12,6 +12,7 @@ export const ToDoListPanel = function(props) {
   if (!toDoListItems || toDoListItems.length === 0) return null;
 
   const handleCheckboxChange = e => {
+    e.preventDefault();
     e.stopPropagation();
     onToDoValueChange(e.target.value);
   };

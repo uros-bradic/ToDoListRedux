@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { TextField } from "./TextField";
 export const AddToDoField = function AddToDoField(props, ref) {
-  const { onAddToDoButtonClick, ...inputProps } = props;
+  const { onAddToDoButtonClick, errors, ...inputProps } = props;
   const [itemValue, setItemValue] = useState("");
+  const { emptyToDoError, toDoAlreadyExistError } = errors;
 
   const handleTextChange = e => {
     e.preventDefault();
@@ -11,19 +12,24 @@ export const AddToDoField = function AddToDoField(props, ref) {
 
   const handleButtonClick = e => {
     e.preventDefault();
-    if (!itemValue) return;
+    // if (!itemValue) return;
     onAddToDoButtonClick(itemValue);
+    setItemValue("");
   };
 
   return (
-    <div>
+    <form>
       <TextField
         onChange={handleTextChange}
         value={itemValue}
         {...inputProps}
         placeholder="Add to do"
       />
-      <button onClick={handleButtonClick}>Add</button>
-    </div>
+      <button type="submit" onClick={handleButtonClick}>
+        Add
+      </button>
+      <div class="error">{emptyToDoError && emptyToDoError}</div>
+      <div class="error">{toDoAlreadyExistError && toDoAlreadyExistError}</div>
+    </form>
   );
 };
