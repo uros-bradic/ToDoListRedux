@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { CheckBoxField } from "./CheckboxField";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
+import { toDoListContext } from "./ToDoListContainer";
 
-export const ToDoListPanel = function(props) {
+export const ToDoListPanel = function() {
   const {
-    toDoListItems,
+    itemsList,
     onToDoValueChange,
     onRemoveToDoButtonClick,
     onSortEnd
-  } = props;
-  if (!toDoListItems || toDoListItems.length === 0) return null;
+  } = useContext(toDoListContext);
+
+  if (!itemsList || itemsList.length === 0) return null;
 
   const handleCheckboxChange = e => {
     e.preventDefault();
@@ -41,7 +43,7 @@ export const ToDoListPanel = function(props) {
 
   return (
     <SortableContainer onSortEnd={onSortEnd}>
-      {toDoListItems.map((item, index) => (
+      {itemsList.map((item, index) => (
         <SortableItem item={item} index={index} key={item.title} />
       ))}
     </SortableContainer>

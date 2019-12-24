@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { TextField } from "./TextField";
-export const AddToDoField = function AddToDoField(props) {
-  const { onAddToDoButtonClick, errors, ...inputProps } = props;
+import { toDoListContext } from "./ToDoListContainer";
+export const AddToDoField = function AddToDoField() {
+  const { onAddToDoButtonClick, errors } = useContext(toDoListContext);
   const [itemValue, setItemValue] = useState("");
   const { emptyToDoError, toDoAlreadyExistError } = errors;
 
@@ -12,24 +13,26 @@ export const AddToDoField = function AddToDoField(props) {
 
   const handleButtonClick = e => {
     e.preventDefault();
-    // if (!itemValue) return;
     onAddToDoButtonClick(itemValue);
     setItemValue("");
   };
 
   return (
-    <form>
-      <TextField
-        onChange={handleTextChange}
-        value={itemValue}
-        {...inputProps}
-        placeholder="Add to do"
-      />
-      <button type="submit" onClick={handleButtonClick}>
-        Add
-      </button>
-      <div class="error">{emptyToDoError && emptyToDoError}</div>
-      <div class="error">{toDoAlreadyExistError && toDoAlreadyExistError}</div>
-    </form>
+    <div>
+      <form>
+        <TextField
+          onChange={handleTextChange}
+          value={itemValue}
+          placeholder="Add to do"
+        />
+        <button type="submit" onClick={handleButtonClick}>
+          Add
+        </button>
+        <div className="error">{emptyToDoError && emptyToDoError}</div>
+        <div className="error">
+          {toDoAlreadyExistError && toDoAlreadyExistError}
+        </div>
+      </form>
+    </div>
   );
 };
