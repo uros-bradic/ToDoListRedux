@@ -3,6 +3,10 @@ import ReactDOM from "react-dom";
 import ToDoListContainer from "./components/ToDoListContainer";
 import "./styles.css";
 
+import store from "./store/store.js";
+import { addToDo, removeToDo } from "./store/actions.js";
+import { Provider } from "react-redux";
+
 function App() {
   return (
     <div className="App">
@@ -12,4 +16,13 @@ function App() {
 }
 
 const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  rootElement
+);
+
+window.store = store;
+window.addToDo = addToDo;
+window.removeToDo = removeToDo;

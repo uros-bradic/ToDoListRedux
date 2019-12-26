@@ -1,8 +1,12 @@
-import React, { useContext } from "react";
-import { toDoListContext } from "./ToDoListContainer";
+import React from "react";
+import { connect } from "react-redux";
 
-export const ToDoProgressPanel = function ToDoProgressPanel() {
-  const { itemsList } = useContext(toDoListContext);
+const mapStateToProps = state => {
+  return {
+    itemsList: state.itemsList
+  };
+};
+const ToDoProgressPanelConnected = function ToDoProgressPanel({ itemsList }) {
   let totalItems = itemsList.length;
   let finishedItems = itemsList.filter(item => item.checked).length;
   return (
@@ -11,3 +15,7 @@ export const ToDoProgressPanel = function ToDoProgressPanel() {
     </div>
   );
 };
+
+export const ToDoProgressPanel = connect(mapStateToProps)(
+  ToDoProgressPanelConnected
+);

@@ -2,25 +2,37 @@ import React, { useContext } from "react";
 import { CheckBoxField } from "./CheckboxField";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
 import { toDoListContext } from "./ToDoListContainer";
+import { removeToDo, setToDoValue } from "../store/actions";
+import { connect } from "react-redux";
 
-export const ToDoListPanel = function() {
-  const {
-    itemsList,
-    onToDoValueChange,
-    onRemoveToDoButtonClick,
-    onSortEnd
-  } = useContext(toDoListContext);
+const mapStateToProps = state => {
+  return { itemsList: state.itemsList };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    removeToDo: item => dispatch(removeToDo(item)),
+    setToDoValue: item => dispatch(setToDoValue(item))
+  };
+}
+
+const ToDoListPanelConnected = function({
+  itemsList,
+  removeToDo,
+  setToDoValue
+}) {
+  const { onSortEnd } = useContext(toDoListContext);
 
   if (!itemsList || itemsList.length === 0) return null;
 
   const handleCheckboxChange = e => {
     e.preventDefault();
     e.stopPropagation();
-    onToDoValueChange(e.target.value);
+    setToDoValue(e.target.value);
   };
 
   const handleRemoveClick = e => {
-    onRemoveToDoButtonClick(e.target.value);
+    removeToDo(e.target.value);
   };
 
   const SortableItem = sortableElement(({ item }) => (
@@ -49,3 +61,8 @@ export const ToDoListPanel = function() {
     </SortableContainer>
   );
 };
+
+export const ToDoListPanel = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ToDoListPanelConnected);

@@ -1,8 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { TextField } from "./TextField";
-import { toDoListContext } from "./ToDoListContainer";
-export const AddToDoField = function AddToDoField() {
-  const { onAddToDoButtonClick, errors } = useContext(toDoListContext);
+import { connect } from "react-redux";
+import { addToDo } from "../store/actions.js";
+
+const mapStateToProps = state => {
+  return { errors: state.errors };
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    addToDo: item => dispatch(addToDo(item))
+  };
+}
+
+const AddToDoFieldConnected = function AddToDoField({ errors, addToDo }) {
   const [itemValue, setItemValue] = useState("");
   const { emptyToDoError, toDoAlreadyExistError } = errors;
 
@@ -13,7 +24,7 @@ export const AddToDoField = function AddToDoField() {
 
   const handleButtonClick = e => {
     e.preventDefault();
-    onAddToDoButtonClick(itemValue);
+    addToDo(itemValue);
     setItemValue("");
   };
 
@@ -36,3 +47,8 @@ export const AddToDoField = function AddToDoField() {
     </div>
   );
 };
+
+export const AddToDoField = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AddToDoFieldConnected);
