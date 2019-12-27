@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { CheckBoxField } from "./CheckboxField";
 import { sortableContainer, sortableElement } from "react-sortable-hoc";
-import { toDoListContext } from "./ToDoListContainer";
-import { removeToDo, setToDoValue } from "../store/actions";
+import { removeToDo, setToDoValue, sortToDoItems } from "../store/actions";
 import { connect } from "react-redux";
 
 const mapStateToProps = state => {
@@ -12,17 +11,17 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
   return {
     removeToDo: item => dispatch(removeToDo(item)),
-    setToDoValue: item => dispatch(setToDoValue(item))
+    setToDoValue: item => dispatch(setToDoValue(item)),
+    sortToDoItems: item => dispatch(sortToDoItems(item))
   };
 }
 
 const ToDoListPanelConnected = function({
   itemsList,
   removeToDo,
-  setToDoValue
+  setToDoValue,
+  sortToDoItems
 }) {
-  const { onSortEnd } = useContext(toDoListContext);
-
   if (!itemsList || itemsList.length === 0) return null;
 
   const handleCheckboxChange = e => {
@@ -33,6 +32,10 @@ const ToDoListPanelConnected = function({
 
   const handleRemoveClick = e => {
     removeToDo(e.target.value);
+  };
+
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    sortToDoItems({ oldIndex, newIndex });
   };
 
   const SortableItem = sortableElement(({ item }) => (

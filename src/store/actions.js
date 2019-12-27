@@ -1,8 +1,8 @@
 import {
   ADD_TODO,
   REMOVE_TODO,
-  UPDATE_ERRORS,
-  SET_TODO_VALUE
+  SET_TODO_VALUE,
+  SORT_TODO_ITEMS
 } from "./action-types";
 
 function addToDo(payload) {
@@ -13,12 +13,12 @@ function removeToDo(payload) {
   return { type: REMOVE_TODO, payload };
 }
 
-function handleErrors(payload) {
-  return { type: UPDATE_ERRORS, payload };
-}
-
 function setToDoValue(payload) {
   return { type: SET_TODO_VALUE, payload };
 }
 
-export { addToDo, removeToDo, handleErrors, setToDoValue };
+function sortToDoItems(payload) {
+  return { type: SORT_TODO_ITEMS, payload };
+}
+
+export { addToDo, removeToDo, sortToDoItems, setToDoValue };

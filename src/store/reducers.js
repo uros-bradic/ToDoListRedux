@@ -1,4 +1,9 @@
-import { ADD_TODO, REMOVE_TODO, SET_TODO_VALUE } from "./action-types";
+import {
+  ADD_TODO,
+  REMOVE_TODO,
+  SET_TODO_VALUE,
+  SORT_TODO_ITEMS
+} from "./action-types";
 const toDoListItems = [
   {
     title: "first to do",
@@ -50,59 +55,84 @@ function hasAnyError(errors) {
     if (value && typeof value === "object") {
       return hasAnyError(value);
     }
-
-    // check if value is not falsy
-    // return typeof value !== 'undefined'
     return !!value;
   });
 }
-function rootReducer(state = initialState, action) {
-  if (action.type === ADD_TODO) {
-    const errors = validateForm(action.payload, state.itemsList);
-    if (hasAnyError(errors)) {
-      return {
-        itemsList: state.itemsList,
-        errors
-      };
+
+function arrayMove(arr, fromIndex, toIndex) {
+  const newArray = [...arr];
+  const element = newArray[fromIndex];
+  newArray.splice(fromIndex, 1);
+  newArray.splice(toIndex, 0, element);
+  return newArray;
+}
+
+function handleSortEnd(payload, state) {
+  const { oldIndex, newIndex } = payload;
+  const itemsList = arrayMove(state.itemsList, oldIndex, newIndex);
+  return {
+    ...state,
+    itemsList
+  };
+}
+
+function handleAddToDo(payload, stateItemsList) {
+  const errors = validateForm(payload, stateItemsList);
+  if (hasAnyError(errors)) {
+    return {
+      itemsList: stateItemsList,
+      errors
+    };
+  }
+  const itemsList = stateItemsList.concat({
+    title: payload,
+    checked: false
+  });
+  return {
+    itemsList,
+    errors
+  };
+}
+
+function handleRemoveToDo(payload, state) {
+  const itemsList = state.itemsList.filter(item => item.title !== payload);
+  return {
+    ...state,
+    itemsList
+  };
+}
+
+function handleSetToDoValue(payload, state) {
+  const itemsList = state.itemsList.map(item => {
+    const newItem = {
+      title: item.title,
+      checked: !item.checked
+    };
+    if (payload === item.title) {
+      return newItem;
+    } else {
+      return item;
     }
-    const itemsList = state.itemsList.concat({
-      title: action.payload,
-      checked: false
-    });
-    return {
-      itemsList,
-      errors
-    };
+  });
+  return {
+    ...state,
+    itemsList
+  };
+}
+
+function rootReducer(state = initialState, action) {
+  switch (action.type) {
+    case ADD_TODO:
+      return handleAddToDo(action.payload, state.itemsList);
+    case REMOVE_TODO:
+      return handleRemoveToDo(action.payload, state);
+    case SET_TODO_VALUE:
+      return handleSetToDoValue(action.payload, state);
+    case SORT_TODO_ITEMS:
+      return handleSortEnd(action.payload, state);
+    default:
+      return state;
   }
-  if (action.type === REMOVE_TODO) {
-    const itemsList = state.itemsList.filter(
-      item => item.title !== action.payload
-    );
-    const errors = state.errors;
-    return {
-      itemsList,
-      errors
-    };
-  }
-  if (action.type === SET_TODO_VALUE) {
-    const itemsList = state.itemsList.map(item => {
-      const newItem = {
-        title: item.title,
-        checked: !item.checked
-      };
-      if (action.payload === item.title) {
-        return newItem;
-      } else {
-        return item;
-      }
-    });
-    const errors = state.errors;
-    return {
-      itemsList,
-      errors
-    };
-  }
-  return state;
 }
 
 export default rootReducer;
