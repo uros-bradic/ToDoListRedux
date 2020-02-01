@@ -1,7 +1,7 @@
 {
   "name": "simple-to-do-list-using-redux",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple to do list using Redux",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
