@@ -3,16 +3,6 @@ import { AddToDoField } from "./AddToDoField";
 import { ToDoListPanel } from "./ToDoListPanel";
 import { ToDoProgressPanel } from "./ToDoProgressPanel";
 
-const defaultContext = {
-  itemsList: [],
-  errors: {},
-  onAddToDoButtonClick: function() {},
-  onToDoValueChange: function() {},
-  onRemoveToDoButtonClick: function() {},
-  onSortEnd: function() {}
-};
-const toDoListContext = React.createContext(defaultContext);
-
 function arrayMove(arr, fromIndex, toIndex) {
   const newArray = [...arr];
   const element = newArray[fromIndex];
@@ -40,14 +30,12 @@ export default class ToDoListContainer extends React.Component {
   }
   render() {
     return (
-      <toDoListContext.Provider value={this.getToDoListContextValue()}>
+      <div>
         <h1>To Do List using Redux</h1>
         <AddToDoField />
         <ToDoListPanel />
         <ToDoProgressPanel />
-      </toDoListContext.Provider>
+      </div>
     );
   }
 }
-
-export { toDoListContext };
